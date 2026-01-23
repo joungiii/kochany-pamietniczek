@@ -1,7 +1,6 @@
 let currentAlbum = []; 
 let currentIndex = 0;   
 const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
-
 let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
@@ -119,15 +118,12 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('mouseup', () => { isDragging = false; });
-
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-
 function updateThumbnails() {
     const thumbs = document.querySelectorAll('.thumbnails-container img');
     thumbs.forEach((img, idx) => {
         img.style.borderColor = (idx === currentIndex) ? '#FF69B4' : 'transparent';
     });
 }
-
 window.onclick = function(event) { if (event.target == document.getElementById('lightbox')) closeLightbox(); }
 window.onload = fixMainGallery;
