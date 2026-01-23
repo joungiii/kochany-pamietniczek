@@ -1,10 +1,9 @@
-let currentAlbum = []; 
-let currentIndex = 0;   
-const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
 let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
+const formats = ['jpg', 'png', 'jpeg', 'JPG', 'PNG'];
 
+// Funkcja sprawdzająca czy plik istnieje
 async function checkImage(url) {
     return new Promise(resolve => {
         const img = new Image();
@@ -14,6 +13,7 @@ async function checkImage(url) {
     });
 }
 
+// Naprawa galerii głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -25,34 +25,21 @@ async function fixMainGallery() {
     }
 }
 
+// Otwieranie Lightboxa
 async function openLightbox(folderName) {
-    resetZoom();
-    currentAlbum = [];
-    for (let i = 0; i <= 10; i++) {
-        let name = (i === 0) ? folderName : `${folderName}-${i}`;
-        let found = false;
-        for (let ext of formats) {
-            let path = `img/${folderName}/${name}.${ext}`;
-            if (await checkImage(path)) { currentAlbum.push(path); found = true; break; }
-        }
-        if (!found && i > 0) break;
+    const imgElement = document.getElementById('main-lb-img');
+    let foundPath = "";
+    for (let ext of formats) {
+        let path = `img/${folderName}/${folderName}.${ext}`;
+        if (await checkImage(path)) { foundPath = path; break; }
     }
-
-    if (currentAlbum.length > 0) {
-        currentIndex = 0;
-        document.getElementById('main-lb-img').src = currentAlbum[0];
-        const thumbContainer = document.getElementById('lb-thumbnails');
-        thumbContainer.innerHTML = '';
-        currentAlbum.forEach((path, idx) => {
-            const thumb = document.createElement('img');
-            thumb.src = path;
-            thumb.onclick = () => { currentIndex = idx; document.getElementById('main-lb-img').src = path; resetZoom(); updateThumbnails(); };
-            thumbContainer.appendChild(thumb);
-        });
-        updateThumbnails();
+    
+    if (foundPath) {
+        imgElement.src = foundPath;
+        document.getElementById('lb-title').innerText = folderName;
+        document.getElementById('lightbox').style.display = 'flex';
+        resetZoom();
     }
-    document.getElementById('lb-title').innerText = "Dzieło: " + folderName;
-    document.getElementById('lightbox').style.display = 'flex';
 }
 
 function changeZoom(amount) {
@@ -67,28 +54,20 @@ function resetZoom() {
 
 function applyTransform() {
     const img = document.getElementById('main-lb-img');
-    const cont = document.getElementById('zoom-container');
-    if (scale > 1) {
-        const maxW = (cont.offsetWidth * scale - cont.offsetWidth) / 2;
-        const maxH = (cont.offsetHeight * scale - cont.offsetHeight) / 2;
-        translateX = Math.min(Math.max(translateX, -maxW), maxW);
-        translateY = Math.min(Math.max(translateY, -maxH), maxH);
-    } else {
-        translateX = 0; translateY = 0;
-    }
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// OBSŁUGA PRZESUWANIA (TRZYMAM = PRZESUWAM)
+// LOGIKA DRAG & DROP (KLIKNIJ I TRZYMAJ)
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
-    
+
     zoomBox.addEventListener('mousedown', (e) => {
         if (scale > 1) {
             isDragging = true;
+            // Zapamiętujemy punkt startu względem obecnego przesunięcia
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
-            zoomBox.style.cursor = 'grabbing';
+            e.preventDefault(); // TO JEST KLUCZ - blokuje domyślne przeciąganie obrazka przez przeglądarkę
         }
     });
 
@@ -101,19 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('mouseup', () => {
         isDragging = false;
-        if(zoomBox) zoomBox.style.cursor = 'grab';
     });
 
+    // Zoom na kółku myszy
     zoomBox.addEventListener('wheel', (e) => {
         e.preventDefault();
-        changeZoom(e.deltaY > 0 ? -0.3 : 0.3);
+        changeZoom(e.deltaY > 0 ? -0.2 : 0.2);
     }, { passive: false });
 });
 
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-function closeLightboxOutside(e) { if (e.target.id === 'lightbox') closeLightbox(); }
-function updateThumbnails() {
-    const thumbs = document.querySelectorAll('.thumbnails-container img');
-    thumbs.forEach((img, idx) => img.style.borderColor = (idx === currentIndex) ? '#FF69B4' : 'transparent');
+
+// Zamykanie po kliknięciu w czarne tło
+window.onclick = function(event) {
+    const lb = document.getElementById('lightbox');
+    if (event.target == lb) closeLightbox();
 }
+
 window.onload = fixMainGallery;
