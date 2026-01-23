@@ -2,27 +2,44 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontakt - Kochany Pamiętniczku Art</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
     <nav>
-        <a href="index.html" class="logo-link"><div class="logo">Kochany Pamiętniczku Art 💖</div></a>
+        <a href="index.html" class="logo-link">
+            <div class="logo">Kochany Pamiętniczku Art 💖</div>
+        </a>
         <div class="menu">
             <a href="index.html">Galeria</a>
             <a href="kontakt.html" class="active">Kontakt</a>
         </div>
     </nav>
-    <div class="contact-container" style="max-width: 600px; margin: 50px auto; padding: 20px; background: white; border-radius: 20px;">
-        <h1 style="text-align: center; color: var(--accent-color); font-family: var(--font-hand);">Napisz do mnie! 🌸</h1>
-        <form class="girly-form" style="display: flex; flex-direction: column; gap: 15px;">
-            <input type="text" placeholder="Imię i Nazwisko" required style="padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
-            <input type="email" placeholder="Twój email" required style="padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
-            <input type="tel" placeholder="Numer telefonu" style="padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
-            <textarea placeholder="Kochany pamiętniczku..." rows="5" style="padding: 12px; border-radius: 10px; border: 1px solid #ddd;"></textarea>
-            <button type="submit" style="background: var(--accent-color); color: white; border: none; padding: 15px; border-radius: 30px; font-weight: bold; cursor: pointer;">Wyślij 💘</button>
-        </form>
-    </div>
+
+    <main class="contact-container">
+        <div class="contact-box">
+            <h1>Napisz do mnie! 💌</h1>
+            <p>Masz pytania o obrazy lub chcesz zamówić coś specjalnego?</p>
+            
+            <form action="#" class="contact-form">
+                <input type="text" placeholder="Twoje Imię" required>
+                <input type="email" placeholder="Twój E-mail" required>
+                <textarea placeholder="Drogi pamiętniczku..." required></textarea>
+                <button type="submit" class="buy-btn">Wyślij wiadomość ✨</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Kochany Pamiętniczku Art 2026</p>
+        <a href="https://www.instagram.com/kochany.pamietniczku.art/" target="_blank" class="instagram-link">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </footer>
+
 </body>
 </html>
