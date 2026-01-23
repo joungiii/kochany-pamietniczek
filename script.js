@@ -6,28 +6,24 @@ let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 
+const imgElement = () => document.getElementById('main-lb-img');
+const container = () => document.getElementById('zoom-container');
+
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
         const folder = img.getAttribute('data-folder');
         for (let ext of formats) {
             const path = `img/${folder}/${folder}.${ext}`;
-            if (await checkImage(path)) {
-                img.src = path;
-                break;
-            }
+            if (await checkImage(path)) { img.src = path; break; }
         }
     }
 }
 
 async function openLightbox(folderName) {
-    const mainImg = document.getElementById('main-lb-img');
-    const thumbContainer = document.getElementById('lb-thumbnails');
-    const title = document.getElementById('lb-title');
-    
     resetZoom();
-    thumbContainer.innerHTML = 'Wczytywanie...';
-    title.innerText = "Dzieło: " + folderName;
+    document.getElementById('lb-thumbnails').innerHTML = 'Wczytywanie...';
+    document.getElementById('lb-title').innerText = "Dzieło: " + folderName;
     currentAlbum = [];
 
     for (let i = 0; i <= 15; i++) {
@@ -43,7 +39,8 @@ async function openLightbox(folderName) {
 
     if (currentAlbum.length > 0) {
         currentIndex = 0;
-        mainImg.src = currentAlbum[0];
+        document.getElementById('main-lb-img').src = currentAlbum[0];
+        const thumbContainer = document.getElementById('lb-thumbnails');
         thumbContainer.innerHTML = '';
         currentAlbum.forEach((path, idx) => {
             const thumb = document.createElement('img');
@@ -51,7 +48,7 @@ async function openLightbox(folderName) {
             thumb.onclick = (e) => {
                 e.stopPropagation();
                 currentIndex = idx;
-                mainImg.src = path;
+                document.getElementById('main-lb-img').src = path;
                 resetZoom();
                 updateThumbnails();
             };
@@ -71,15 +68,11 @@ function checkImage(url) {
     });
 }
 
-// ZOOM I OGRANICZENIE RUCHU
+// ZOOM I TRANSFORMACJA
 function changeZoom(amount) {
-    const oldScale = scale;
     scale += amount;
     if (scale < 1) scale = 1;
-    if (scale > 4) scale = 4;
-    
-    // Jeśli wracamy do 1, resetujemy pozycję
-    if (scale === 1) { translateX = 0; translateY = 0; }
+    if (scale > 5) scale = 5;
     applyTransform();
 }
 
@@ -89,33 +82,41 @@ function resetZoom() {
 }
 
 function applyTransform() {
-    const img = document.getElementById('main-lb-img');
-    const container = document.getElementById('zoom-container');
-    
-    // Obliczamy maksymalne wychylenie, żeby nie widzieć tła
-    const rect = img.getBoundingClientRect();
-    const contRect = container.getBoundingClientRect();
+    const img = imgElement();
+    const cont = container();
+    if (!img || !cont) return;
 
-    const maxW = (contRect.width * scale - contRect.width) / 2;
-    const maxH = (contRect.height * scale - contRect.height) / 2;
-
+    // Obliczanie granic (hamulce)
     if (scale > 1) {
+        const maxW = (cont.offsetWidth * scale - cont.offsetWidth) / 2;
+        const maxH = (cont.offsetHeight * scale - cont.offsetHeight) / 2;
+
         if (Math.abs(translateX) > maxW) translateX = translateX > 0 ? maxW : -maxW;
         if (Math.abs(translateY) > maxH) translateY = translateY > 0 ? maxH : -maxH;
     } else {
-        translateX = 0; translateY = 0;
+        translateX = 0;
+        translateY = 0;
     }
 
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-const container = document.getElementById('zoom-container');
+// OBSŁUGA SCROLLA (MYSZKA)
+document.addEventListener('DOMContentLoaded', () => {
+    const zoomBox = document.getElementById('zoom-container');
+    zoomBox.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.3 : 0.3;
+        changeZoom(delta);
+    }, { passive: false });
 
-container.addEventListener('mousedown', (e) => {
-    if (scale <= 1) return;
-    isDragging = true;
-    startX = e.clientX - translateX;
-    startY = e.clientY - translateY;
+    // PRZESUWANIE MYSZKĄ
+    zoomBox.addEventListener('mousedown', (e) => {
+        if (scale <= 1) return;
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+    });
 });
 
 window.addEventListener('mousemove', (e) => {
