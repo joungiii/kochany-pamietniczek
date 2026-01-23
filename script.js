@@ -14,7 +14,6 @@ async function checkImage(url) {
     });
 }
 
-// Naprawa miniatur na stronie głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -26,14 +25,12 @@ async function fixMainGallery() {
     }
 }
 
-// Otwieranie Lightboxa z albumem
 async function openLightbox(folderName) {
     resetZoom();
     currentAlbum = [];
     const thumbContainer = document.getElementById('lb-thumbnails');
     thumbContainer.innerHTML = 'Wczytywanie...';
 
-    // Przeszukiwanie folderu w poszukiwaniu zdjęć (obraz1, obraz1-1, itd.)
     for (let i = 0; i <= 10; i++) {
         let name = (i === 0) ? folderName : `${folderName}-${i}`;
         let foundPath = null;
@@ -75,7 +72,6 @@ function updateThumbnails() {
     });
 }
 
-// ZOOM I PAN (Kliknij i trzymaj)
 function changeZoom(amount) {
     scale = Math.min(Math.max(1, scale + amount), 5);
     applyTransform();
@@ -99,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isDragging = true;
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
-            e.preventDefault(); // Blokuje przeciąganie obrazka przez przeglądarkę
+            e.preventDefault();
         }
     });
 
