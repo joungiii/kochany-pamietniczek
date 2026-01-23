@@ -22,17 +22,17 @@
     <main>
         <div class="gallery-grid">
             <div class="art-piece" onclick="openLightbox('obraz1')">
-                <img src="img/obraz1/obraz1.png" onerror="this.src='img/obraz1/obraz1.jpg'" alt="Obraz 1">
+                <img class="auto-thumb" data-folder="obraz1" alt="Obraz 1">
                 <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
 
             <div class="art-piece" onclick="openLightbox('obraz2')">
-                <img src="img/obraz2/obraz2.png" onerror="this.src='img/obraz2/obraz2.jpg'" alt="Obraz 2">
+                <img class="auto-thumb" data-folder="obraz2" alt="Obraz 2">
                 <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
 
             <div class="art-piece" onclick="openLightbox('obraz3')">
-                <img src="img/obraz3/obraz3.png" onerror="this.src='img/obraz3/obraz3.jpg'; this.onerror=()=>this.src='img/obraz3/obraz3.jpeg'" alt="Obraz 3">
+                <img class="auto-thumb" data-folder="obraz3" alt="Obraz 3">
                 <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
         </div>
