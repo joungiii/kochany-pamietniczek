@@ -94,6 +94,7 @@ function applyTransform() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
+    
     if(zoomBox) {
         zoomBox.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -101,15 +102,18 @@ document.addEventListener('DOMContentLoaded', () => {
             changeZoom(delta);
         }, { passive: false });
 
+        // POCZĄTEK PRZESUWANIA (tylko mousedown)
         zoomBox.addEventListener('mousedown', (e) => {
             if (scale <= 1) return;
             isDragging = true;
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
+            e.preventDefault(); // Zapobiega "wyciąganiu" obrazka na pulpit
         });
     }
 });
 
+// RUCH MYSZKI (globalny, żeby nie gubić obrazka przy szybkim ruchu)
 window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     translateX = e.clientX - startX;
@@ -117,7 +121,16 @@ window.addEventListener('mousemove', (e) => {
     applyTransform();
 });
 
-window.addEventListener('mouseup', () => { isDragging = false; });
+// KONIEC PRZESUWANIA (globalny)
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// Wyłączenie draga, jeśli myszka wyjdzie poza okno przeglądarki
+window.addEventListener('mouseleave', () => {
+    isDragging = false;
+});
+
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 function updateThumbnails() {
     const thumbs = document.querySelectorAll('.thumbnails-container img');
