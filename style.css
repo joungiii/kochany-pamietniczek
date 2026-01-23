@@ -29,53 +29,50 @@ nav {
     cursor: pointer; background: white; aspect-ratio: 4 / 5; transition: 0.3s;
 }
 .art-piece img { width: 100%; height: 100%; object-fit: cover; }
-.overlay { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255, 105, 180, 0.4); display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; 
-}
-.art-piece:hover .overlay { opacity: 1; }
-.overlay span { background: white; padding: 10px 20px; border-radius: 25px; color: var(--accent-color); font-weight: bold; }
 
-/* Lightbox */
+/* POWIĘKSZONY LIGHTBOX */
 .lightbox { 
     display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
-    width: 100%; height: 100%; background: rgba(0,0,0,0.8); 
-    justify-content: center; align-items: center; padding: 20px;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.85); 
+    justify-content: center; align-items: center; padding: 10px;
 }
 .lightbox-content { 
-    background: white; padding: 25px; border-radius: 25px; display: flex; 
-    gap: 25px; max-width: 1000px; width: 95%; max-height: 90vh; position: relative;
+    background: white; padding: 30px; border-radius: 25px; display: flex; 
+    gap: 30px; max-width: 1400px; /* Zwiększone z 1000px */
+    width: 98%; max-height: 95vh; position: relative;
 }
+.lightbox-gallery { flex: 2; } /* Zdjęcie zajmuje teraz więcej miejsca niż tekst */
 .main-img-container { 
-    width: 100%; height: 400px; background: #f9f9f9; border-radius: 15px; 
+    width: 100%; height: 650px; /* Zwiększone z 400px */
+    background: #f9f9f9; border-radius: 15px; 
     position: relative; cursor: zoom-in; overflow: hidden; display: flex; justify-content: center; align-items: center;
 }
 .main-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.zoom-hint { 
-    position: absolute; bottom: 10px; right: 10px; background: rgba(255,255,255,0.7); 
-    padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; pointer-events: none;
-}
-.thumbnails-container { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px; }
-.thumbnails-container img { width: 60px; height: 60px; object-fit: cover; cursor: pointer; border-radius: 8px; border: 2px solid transparent; }
 
-/* Fullscreen Overlay */
+.thumbnails-container { display: flex; gap: 12px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px; }
+.thumbnails-container img { width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 3px solid transparent; }
+
+.lightbox-info { flex: 1; display: flex; flex-direction: column; min-width: 300px; }
+.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.8rem; margin: 0; }
+.price { font-size: 1.8rem; font-weight: bold; margin: 20px 0; }
+.buy-btn { background: var(--accent-color); color: white; padding: 20px; text-align: center; border-radius: 40px; text-decoration: none; font-weight: bold; font-size: 1.2rem; margin-top: auto; }
+
+/* FULLSCREEN */
 .fullscreen-overlay {
     display: none; position: fixed; z-index: 2000; left: 0; top: 0; 
     width: 100%; height: 100%; background: rgba(0,0,0,0.95);
     justify-content: center; align-items: center;
 }
-#fs-img { max-width: 90%; max-height: 90%; object-fit: contain; }
-.fs-close { position: absolute; top: 20px; right: 30px; font-size: 50px; color: white; cursor: pointer; }
+#fs-img { max-width: 95%; max-height: 95%; object-fit: contain; }
+.fs-close { position: absolute; top: 20px; right: 30px; font-size: 60px; color: white; cursor: pointer; }
 .fs-nav { 
     position: absolute; top: 50%; transform: translateY(-50%); 
-    background: none; border: none; color: white; font-size: 60px; cursor: pointer; padding: 20px;
+    background: none; border: none; color: white; font-size: 80px; cursor: pointer; padding: 30px;
 }
 .prev { left: 10px; }
 .next { right: 10px; }
-.fs-nav:hover { color: var(--accent-color); }
 
-.lightbox-info { flex: 1; display: flex; flex-direction: column; }
-.close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; }
-.buy-btn { background: var(--accent-color); color: white; padding: 15px; text-align: center; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: auto; }
-
-@media (max-width: 800px) { .lightbox-content { flex-direction: column; } }
+@media (max-width: 1000px) { 
+    .lightbox-content { flex-direction: column; overflow-y: auto; }
+    .main-img-container { height: 400px; }
+}
