@@ -34,9 +34,9 @@
         </div>
     </main>
 
-    <div id="lightbox" class="lightbox">
+    <div id="lightbox" class="lightbox" onclick="closeLightboxOutside(event)">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
-        <div class="lightbox-content">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
             <div class="lightbox-gallery">
                 <div class="main-img-container" id="zoom-container">
                     <img id="main-lb-img" src="" alt="Podgląd">
