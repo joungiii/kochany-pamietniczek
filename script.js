@@ -1,61 +1,55 @@
-console.log("Skrypt Kochany Pamiętniczku Art załadowany! 💖");
+let currentAlbum = []; // Przechowuje listę ścieżek aktualnie otwartego folderu
+let currentIndex = 0;   // Przechowuje indeks aktualnie wyświetlanego zdjęcia
 
 async function openLightbox(folderName) {
-    console.log("Kliknięto folder: " + folderName);
-    
-    const lightbox = document.getElementById('lightbox');
     const mainImg = document.getElementById('main-lb-img');
     const thumbContainer = document.getElementById('lb-thumbnails');
     const title = document.getElementById('lb-title');
     
-    if (!lightbox) {
-        console.error("Nie znaleziono elementu lightbox w HTML!");
-        return;
-    }
-
-    // Pokaż lightbox od razu
-    lightbox.style.display = 'flex';
     thumbContainer.innerHTML = 'Wczytywanie...';
     title.innerText = "Dzieło: " + folderName;
+    currentAlbum = [];
 
-    const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
-    let mainPath = null;
-
-    // 1. Szukamy głównego obrazka
-    for (let ext of formats) {
-        const testPath = `img/${folderName}/${folderName}.${ext}`;
-        const exists = await checkImage(testPath);
-        if (exists) {
-            mainPath = testPath;
-            break;
+    const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG'];
+    
+    // 1. Szukanie głównego i dodatkowych obrazków
+    for (let i = 0; i <= 10; i++) {
+        let name = (i === 0) ? folderName : `${folderName}-${i}`;
+        let foundPath = null;
+        
+        for (let ext of formats) {
+            let path = `img/${folderName}/${name}.${ext}`;
+            if (await checkImage(path)) {
+                foundPath = path;
+                break;
+            }
+        }
+        
+        if (foundPath) {
+            currentAlbum.push(foundPath);
+        } else if (i > 0) {
+            break; // Przerwij jeśli nie ma kolejnego numeru
         }
     }
 
-    if (mainPath) {
-        mainImg.src = mainPath;
+    if (currentAlbum.length > 0) {
+        currentIndex = 0;
+        mainImg.src = currentAlbum[0];
         thumbContainer.innerHTML = '';
-        addThumb(mainPath, thumbContainer, mainImg);
-
-        // 2. Szukamy dodatkowych obrazków (obraz-1, obraz-2...)
-        for (let i = 1; i <= 10; i++) {
-            let extraPath = null;
-            for (let ext of formats) {
-                const testExtra = `img/${folderName}/${folderName}-${i}.${ext}`;
-                if (await checkImage(testExtra)) {
-                    extraPath = testExtra;
-                    break;
-                }
-            }
-            if (extraPath) {
-                addThumb(extraPath, thumbContainer, mainImg);
-            } else {
-                break; 
-            }
-        }
-    } else {
-        thumbContainer.innerHTML = "Nie znaleziono plików w img/" + folderName;
-        console.error("Błąd ścieżki dla folderu: " + folderName);
+        currentAlbum.forEach((path, idx) => {
+            const thumb = document.createElement('img');
+            thumb.src = path;
+            thumb.onclick = (e) => {
+                e.stopPropagation();
+                currentIndex = idx;
+                mainImg.src = path;
+                updateThumbnails();
+            };
+            thumbContainer.appendChild(thumb);
+        });
     }
+
+    document.getElementById('lightbox').style.display = 'flex';
 }
 
 function checkImage(url) {
@@ -67,27 +61,54 @@ function checkImage(url) {
     });
 }
 
-function addThumb(path, container, mainDisplay) {
-    const thumb = document.createElement('img');
-    thumb.src = path;
-    thumb.onclick = () => {
-        mainDisplay.src = path;
-        document.querySelectorAll('.thumbnails-container img').forEach(i => i.style.borderColor = 'transparent');
-        thumb.style.borderColor = '#FF69B4';
-    };
-    container.appendChild(thumb);
+// FULLSCREEN LOGIC
+function openFullscreen() {
+    const fsOverlay = document.getElementById('fullscreen-view');
+    const fsImg = document.getElementById('fs-img');
+    fsImg.src = currentAlbum[currentIndex];
+    fsOverlay.style.display = 'flex';
+}
+
+function closeFullscreen() {
+    document.getElementById('fullscreen-view').style.display = 'none';
+}
+
+function changeFsImg(direction) {
+    currentIndex += direction;
+    if (currentIndex >= currentAlbum.length) currentIndex = 0;
+    if (currentIndex < 0) currentIndex = currentAlbum.length - 1;
+    
+    document.getElementById('fs-img').src = currentAlbum[currentIndex];
+    document.getElementById('main-lb-img').src = currentAlbum[currentIndex];
 }
 
 function closeLightbox() {
     document.getElementById('lightbox').style.display = 'none';
+    closeFullscreen();
 }
+
+function updateThumbnails() {
+    document.querySelectorAll('.thumbnails-container img').forEach((img, idx) => {
+        img.style.borderColor = (idx === currentIndex) ? '#FF69B4' : 'transparent';
+    });
+}
+
+// Obsługa klawiszy
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape") {
+        if (document.getElementById('fullscreen-view').style.display === 'flex') {
+            closeFullscreen();
+        } else {
+            closeLightbox();
+        }
+    }
+    if (document.getElementById('fullscreen-view').style.display === 'flex') {
+        if (e.key === "ArrowRight") changeFsImg(1);
+        if (e.key === "ArrowLeft") changeFsImg(-1);
+    }
+});
 
 window.onclick = function(event) {
-    const lb = document.getElementById('lightbox');
-    if (event.target == lb) closeLightbox();
+    if (event.target == document.getElementById('lightbox')) closeLightbox();
+    if (event.target == document.getElementById('fullscreen-view')) closeFullscreen();
 }
-
-// Obsługa klawisza ESC
-document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") closeLightbox();
-});
