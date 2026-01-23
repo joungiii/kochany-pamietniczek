@@ -1,51 +1,70 @@
-// Lista rozszerzeń, które skrypt będzie sprawdzał automatycznie
-const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG'];
+console.log("Skrypt Kochany Pamiętniczku Art załadowany! 💖");
 
 async function openLightbox(folderName) {
+    console.log("Kliknięto folder: " + folderName);
+    
+    const lightbox = document.getElementById('lightbox');
     const mainImg = document.getElementById('main-lb-img');
     const thumbContainer = document.getElementById('lb-thumbnails');
     const title = document.getElementById('lb-title');
     
-    thumbContainer.innerHTML = 'Wczytywanie...'; // Mały feedback dla użytkownika
-    title.innerText = "Dzieło: " + folderName;
-
-    // 1. Szukamy zdjęcia głównego (obrazX.rozszerzenie)
-    const mainPath = await findProperPath(`img/${folderName}/${folderName}`);
-    
-    if (mainPath) {
-        mainImg.src = mainPath;
-        thumbContainer.innerHTML = ''; // Czyścimy komunikat wczytywania
-        addThumb(mainPath, thumbContainer, mainImg);
-    } else {
-        thumbContainer.innerHTML = 'Nie znaleziono zdjęcia głównego (.png lub .jpg)';
+    if (!lightbox) {
+        console.error("Nie znaleziono elementu lightbox w HTML!");
         return;
     }
 
-    // 2. Szukamy dodatkowych zdjęć (obrazX-1, obrazX-2...)
-    for (let i = 1; i <= 10; i++) {
-        const extraPath = await findProperPath(`img/${folderName}/${folderName}-${i}`);
-        
-        if (extraPath) {
-            addThumb(extraPath, thumbContainer, mainImg);
-        } else {
-            break; // Jeśli nie ma kolejnego numeru w żadnym formacie, kończymy
+    // Pokaż lightbox od razu
+    lightbox.style.display = 'flex';
+    thumbContainer.innerHTML = 'Wczytywanie...';
+    title.innerText = "Dzieło: " + folderName;
+
+    const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
+    let mainPath = null;
+
+    // 1. Szukamy głównego obrazka
+    for (let ext of formats) {
+        const testPath = `img/${folderName}/${folderName}.${ext}`;
+        const exists = await checkImage(testPath);
+        if (exists) {
+            mainPath = testPath;
+            break;
         }
+    }
+
+    if (mainPath) {
+        mainImg.src = mainPath;
+        thumbContainer.innerHTML = '';
+        addThumb(mainPath, thumbContainer, mainImg);
+
+        // 2. Szukamy dodatkowych obrazków (obraz-1, obraz-2...)
+        for (let i = 1; i <= 10; i++) {
+            let extraPath = null;
+            for (let ext of formats) {
+                const testExtra = `img/${folderName}/${folderName}-${i}.${ext}`;
+                if (await checkImage(testExtra)) {
+                    extraPath = testExtra;
+                    break;
+                }
+            }
+            if (extraPath) {
+                addThumb(extraPath, thumbContainer, mainImg);
+            } else {
+                break; 
+            }
+        }
+    } else {
+        thumbContainer.innerHTML = "Nie znaleziono plików w img/" + folderName;
+        console.error("Błąd ścieżki dla folderu: " + folderName);
     }
 }
 
-// Funkcja pomocnicza, która "testuje" rozszerzenia jedno po drugim
-async function findProperPath(basePath) {
-    for (let ext of formats) {
-        const fullPath = `${basePath}.${ext}`;
-        const exists = await new Promise(resolve => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = fullPath;
-        });
-        if (exists) return fullPath;
-    }
-    return null; // Jeśli żadne rozszerzenie nie zadziałało
+function checkImage(url) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
 }
 
 function addThumb(path, container, mainDisplay) {
@@ -64,5 +83,11 @@ function closeLightbox() {
 }
 
 window.onclick = function(event) {
-    if (event.target == document.getElementById('lightbox')) closeLightbox();
+    const lb = document.getElementById('lightbox');
+    if (event.target == lb) closeLightbox();
 }
+
+// Obsługa klawisza ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape") closeLightbox();
+});
