@@ -4,12 +4,42 @@
     --text-color: #4A4A4A;
     --font-hand: 'Patrick Hand', cursive;
     --font-main: 'Quicksand', sans-serif;
+    /* Kolor biały z 90% krycia dla efektu przezroczystości */
+    --glass-white: rgba(255, 255, 255, 0.9);
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; font-family: var(--font-main); background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
 
-nav { display: flex; justify-content: space-between; padding: 15px 50px; background: white; box-shadow: 0 4px 15px rgba(255, 105, 180, 0.1); align-items: center; position: sticky; top: 0; z-index: 100; }
+body { 
+    margin: 0; 
+    font-family: var(--font-main); 
+    color: var(--text-color); 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    
+    /* Główne tło strony */
+    background-image: url('img/tlo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Nawigacja z efektem przezroczystości */
+nav { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 15px 50px; 
+    background: var(--glass-white); 
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.1); 
+    align-items: center; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+    backdrop-filter: blur(5px); /* Delikatne rozmycie tła pod menu */
+}
+
 .logo-link { text-decoration: none; }
 .logo { font-family: var(--font-hand); font-size: 1.8rem; color: var(--accent-color); font-weight: bold; }
 .menu a { text-decoration: none; color: var(--text-color); margin-left: 20px; font-weight: 700; }
@@ -17,18 +47,84 @@ nav { display: flex; justify-content: space-between; padding: 15px 50px; backgro
 
 main { flex: 1; }
 
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 40px; max-width: 1200px; margin: 0 auto; }
-.art-piece { position: relative; border-radius: 20px; overflow: hidden; cursor: pointer; background: white; aspect-ratio: 4 / 5; transition: 0.3s; }
+/* Galeria */
+.gallery-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 25px; 
+    padding: 40px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.art-piece { 
+    position: relative; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    cursor: pointer; 
+    background: white; 
+    aspect-ratio: 4 / 5; 
+    transition: 0.3s; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
 .art-piece img { width: 100%; height: 100%; object-fit: cover; }
-.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 105, 180, 0.4); display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; }
+.overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(255, 105, 180, 0.4); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    opacity: 0; 
+    transition: 0.3s; 
+}
 .art-piece:hover .overlay { opacity: 1; }
 .overlay span { background: white; padding: 10px 20px; border-radius: 25px; color: var(--accent-color); font-weight: bold; }
 
 /* Lightbox */
-.lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 10px; }
-.lightbox-content { background: white; padding: 30px; border-radius: 25px; display: flex; gap: 30px; max-width: 1400px; width: 95%; max-height: 90vh; position: relative; }
+.lightbox { 
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    justify-content: center; 
+    align-items: center; 
+    padding: 10px; 
+}
+
+.lightbox-content { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 25px; 
+    display: flex; 
+    gap: 30px; 
+    max-width: 1400px; 
+    width: 95%; 
+    max-height: 90vh; 
+    position: relative; 
+}
+
 .lightbox-gallery { flex: 2; display: flex; flex-direction: column; overflow: hidden; }
-.main-img-container { width: 100%; height: 600px; background: #f9f9f9; border-radius: 15px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: grab; }
+.main-img-container { 
+    width: 100%; 
+    height: 600px; 
+    background: #f9f9f9; 
+    border-radius: 15px; 
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: grab; 
+}
 
 #main-lb-img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
 
@@ -36,27 +132,69 @@ main { flex: 1; }
 .lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.5rem; margin: 0; }
 .price { font-size: 1.5rem; font-weight: bold; margin: 15px 0; }
 
-.buy-btn { background: var(--accent-color); color: white; padding: 18px; text-align: center; border-radius: 40px; text-decoration: none; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; display: block; width: 100%; transition: 0.3s; }
-.buy-btn:hover { background: #ff4da6; transform: translateY(-2px); }
+.buy-btn { 
+    background: var(--accent-color); 
+    color: white; 
+    padding: 18px; 
+    text-align: center; 
+    border-radius: 40px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 1.1rem; 
+    border: none; 
+    cursor: pointer; 
+    display: block; 
+    width: 100%; 
+    transition: 0.3s; 
+}
+.buy-btn:hover { background: #ff4da6; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3); }
 
 .zoom-controls { position: absolute; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 10; }
 .zoom-controls button { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--accent-color); color: white; font-weight: bold; cursor: pointer; }
 
 .thumbnails-container { display: flex; gap: 12px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px; }
-.thumbnails-container img { width: 70px; height: 70px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 2px solid transparent; }
+.thumbnails-container img { width: 70px; height: 70px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 3px solid transparent; }
 
 .close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; }
 
-/* Kontakt */
+/* Kontakt z przezroczystym tłem */
 .contact-container { display: flex; justify-content: center; padding: 50px 20px; }
-.contact-box { background: white; padding: 40px; border-radius: 30px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.contact-box { 
+    background: var(--glass-white); 
+    padding: 40px; 
+    border-radius: 30px; 
+    max-width: 600px; 
+    width: 100%; 
+    text-align: center; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+    backdrop-filter: blur(5px);
+}
+
 .contact-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
-.contact-form input, .contact-form textarea { padding: 15px; border: 2px solid #eee; border-radius: 15px; font-family: var(--font-main); font-size: 1rem; outline: none; }
+.contact-form input, .contact-form textarea { 
+    padding: 15px; 
+    border: 2px solid #eee; 
+    border-radius: 15px; 
+    font-family: var(--font-main); 
+    font-size: 1rem; 
+    outline: none; 
+    background: white;
+}
 .contact-form textarea { min-height: 160px; resize: none; }
 
-footer { padding: 30px; text-align: center; background: white; margin-top: 50px; }
+/* Stopka z przezroczystością */
+footer { 
+    padding: 30px; 
+    text-align: center; 
+    background: var(--glass-white); 
+    margin-top: 50px; 
+    backdrop-filter: blur(5px);
+}
 footer p { font-size: 0.9rem; color: #888; margin-bottom: 8px; }
 .instagram-link { color: #bbb; font-size: 1.5rem; transition: 0.3s; }
 .instagram-link:hover { color: var(--accent-color); }
 
-@media (max-width: 1000px) { .lightbox-content { flex-direction: column; overflow-y: auto; } .main-img-container { height: 350px; } }
+@media (max-width: 1000px) { 
+    .lightbox-content { flex-direction: column; overflow-y: auto; } 
+    .main-img-container { height: 350px; } 
+}
