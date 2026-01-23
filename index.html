@@ -6,6 +6,7 @@
     <title>Kochany Pamiętniczku Art</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
@@ -44,9 +45,9 @@
                     <img id="main-lb-img" src="" alt="Podgląd">
                     
                     <div class="zoom-controls">
-                        <button onclick="changeZoom(0.2)">+</button>
-                        <button onclick="changeZoom(-0.2)">-</button>
-                        <button onclick="resetZoom()">↺</button>
+                        <button onclick="changeZoom(0.2)" title="Powiększ">+</button>
+                        <button onclick="changeZoom(-0.2)" title="Pomniejsz">-</button>
+                        <button onclick="resetZoom()" title="Resetuj widok">1:1</button>
                     </div>
                 </div>
                 <div id="lb-thumbnails" class="thumbnails-container"></div>
@@ -59,6 +60,13 @@
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; Kochany Pamiętniczku Art 2026</p>
+        <a href="https://www.instagram.com/kochany.pamietniczku.art/" target="_blank" class="instagram-link">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </footer>
 
     <script src="script.js"></script>
 </body>
