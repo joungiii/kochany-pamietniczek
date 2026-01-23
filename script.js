@@ -117,8 +117,15 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('mouseup', () => { isDragging = false; });
+
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-function closeLightboxOutside(e) { if (e.target.id === 'lightbox') closeLightbox(); }
+
+// FUNKCJA ZAMYKANIA POZA OKNEM
+function closeLightboxOutside(e) {
+    if (e.target.id === 'lightbox') {
+        closeLightbox();
+    }
+}
 
 function updateThumbnails() {
     const thumbs = document.querySelectorAll('.thumbnails-container img');
