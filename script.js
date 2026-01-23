@@ -1,10 +1,10 @@
 let currentAlbum = []; 
+let currentIndex = 0;
 let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 const formats = ['jpg', 'png', 'jpeg', 'JPG', 'PNG'];
 
-// 1. WCZYTYWANIE OBRAZÓW (Twoja działająca wersja)
 async function checkImage(url) {
     return new Promise(resolve => {
         const img = new Image();
@@ -14,6 +14,7 @@ async function checkImage(url) {
     });
 }
 
+// Naprawa miniatur na stronie głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -25,23 +26,56 @@ async function fixMainGallery() {
     }
 }
 
-// 2. LIGHTBOX
+// Otwieranie Lightboxa z albumem
 async function openLightbox(folderName) {
     resetZoom();
-    let foundPath = "";
-    for (let ext of formats) {
-        let path = `img/${folderName}/${folderName}.${ext}`;
-        if (await checkImage(path)) { foundPath = path; break; }
+    currentAlbum = [];
+    const thumbContainer = document.getElementById('lb-thumbnails');
+    thumbContainer.innerHTML = 'Wczytywanie...';
+
+    // Przeszukiwanie folderu w poszukiwaniu zdjęć (obraz1, obraz1-1, itd.)
+    for (let i = 0; i <= 10; i++) {
+        let name = (i === 0) ? folderName : `${folderName}-${i}`;
+        let foundPath = null;
+        for (let ext of formats) {
+            let path = `img/${folderName}/${name}.${ext}`;
+            if (await checkImage(path)) { foundPath = path; break; }
+        }
+        if (foundPath) currentAlbum.push(foundPath);
+        else if (i > 0) break;
     }
-    
-    if (foundPath) {
-        document.getElementById('main-lb-img').src = foundPath;
-        document.getElementById('lb-title').innerText = "Dzieło: " + folderName;
-        document.getElementById('lightbox').style.display = 'flex';
+
+    if (currentAlbum.length > 0) {
+        currentIndex = 0;
+        document.getElementById('main-lb-img').src = currentAlbum[0];
+        thumbContainer.innerHTML = '';
+        currentAlbum.forEach((path, idx) => {
+            const thumb = document.createElement('img');
+            thumb.src = path;
+            thumb.onclick = (e) => {
+                e.stopPropagation();
+                currentIndex = idx;
+                document.getElementById('main-lb-img').src = path;
+                resetZoom();
+                updateThumbnails();
+            };
+            thumbContainer.appendChild(thumb);
+        });
+        updateThumbnails();
     }
+    document.getElementById('lb-title').innerText = "Dzieło: " + folderName;
+    document.getElementById('lightbox').style.display = 'flex';
 }
 
-// 3. ZOOM I PRZESUWANIE (Kliknij i trzymaj)
+function updateThumbnails() {
+    const thumbs = document.querySelectorAll('.thumbnails-container img');
+    thumbs.forEach((img, idx) => {
+        img.style.borderColor = (idx === currentIndex) ? '#FF69B4' : 'transparent';
+        img.style.opacity = (idx === currentIndex) ? '1' : '0.6';
+    });
+}
+
+// ZOOM I PAN (Kliknij i trzymaj)
 function changeZoom(amount) {
     scale = Math.min(Math.max(1, scale + amount), 5);
     applyTransform();
@@ -65,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isDragging = true;
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
-            e.preventDefault(); // Blokuje domyślne przeciąganie obrazka
+            e.preventDefault(); // Blokuje przeciąganie obrazka przez przeglądarkę
         }
     });
 
@@ -76,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTransform();
     });
 
-    window.addEventListener('mouseup', () => {
-        isDragging = false;
-    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
 
     zoomBox.addEventListener('wheel', (e) => {
         e.preventDefault();
@@ -87,10 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-
-// Zamykanie po kliknięciu poza okno
-window.onclick = function(e) {
-    if (e.target == document.getElementById('lightbox')) closeLightbox();
-}
+function closeLightboxOutside(e) { if (e.target.id === 'lightbox') closeLightbox(); }
 
 window.onload = fixMainGallery;
