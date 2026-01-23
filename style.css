@@ -3,25 +3,22 @@
     --text-color: #4A4A4A;
     --font-hand: 'Patrick Hand', cursive;
     --font-main: 'Quicksand', sans-serif;
+    /* Twoje 70% bieli */
+    --glass-white: rgba(255, 255, 255, 0.7);
 }
 
 * { box-sizing: border-box; }
 
 body { 
-    margin: 0; 
-    font-family: var(--font-main); 
-    color: var(--text-color); 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh; 
-    /* Twoje tło na całej stronie */
+    margin: 0; font-family: var(--font-main); color: var(--text-color); 
+    display: flex; flex-direction: column; min-height: 100vh; 
     background: url('img/tlo.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
-/* 70% PRZEZROCZYSTOŚCI DLA HEADER, FOOTER I KART */
+/* Przezroczyste sekcje prześwitujące */
 nav, footer, .art-piece, .contact-box { 
-    background: rgba(255, 255, 255, 0.7) !important; 
+    background: var(--glass-white) !important; 
     backdrop-filter: blur(5px); 
 }
 
@@ -49,7 +46,7 @@ nav {
 
 .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* LIGHTBOX - STABILNY UKŁAD */
+/* Lightbox */
 .lightbox { 
     display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
     width: 100%; height: 100%; background: rgba(0,0,0,0.85); 
@@ -61,16 +58,18 @@ nav {
     gap: 30px; max-width: 1400px; width: 95%; max-height: 90vh; position: relative; 
 }
 
+.lightbox-gallery { flex: 2; display: flex; flex-direction: column; overflow: hidden; }
+
 .main-img-container { 
-    width: 100%; height: 600px; background: #f9f9f9; border-radius: 15px; 
+    width: 100%; height: 600px; background: #f5f5f5; border-radius: 15px; 
     position: relative; overflow: hidden; display: flex; 
     justify-content: center; align-items: center; cursor: grab; 
 }
 
 #main-lb-img { 
     max-width: 100%; max-height: 100%; object-fit: contain; 
-    transition: transform 0.1s ease-out;
-    user-select: none; /* Blokuje zaznaczanie obrazka */
+    transition: transform 0.1s ease-out; user-select: none;
+    -webkit-user-drag: none;
 }
 
 .lightbox-info { flex: 1; display: flex; flex-direction: column; min-width: 300px; }
@@ -85,12 +84,12 @@ nav {
 .zoom-controls { position: absolute; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 10; }
 .zoom-controls button { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--accent-color); color: white; cursor: pointer; }
 
-.close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; }
+.thumbnails-container { display: flex; gap: 10px; margin-top: 20px; overflow-x: auto; padding-bottom: 5px; }
+.thumbnails-container img { width: 70px; height: 70px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 3px solid transparent; transition: 0.2s; }
 
-/* KONTAKT */
-.contact-container { display: flex; justify-content: center; padding: 50px 20px; }
-.contact-box { padding: 40px; border-radius: 30px; max-width: 600px; width: 100%; text-align: center; }
+.close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; }
 
 footer { padding: 30px; text-align: center; margin-top: auto; }
+.instagram-link { color: #bbb; font-size: 1.5rem; }
 
 @media (max-width: 1000px) { .lightbox-content { flex-direction: column; overflow-y: auto; } .main-img-container { height: 350px; } }
