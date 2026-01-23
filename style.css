@@ -7,7 +7,15 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; font-family: var(--font-main); background-color: var(--bg-color); color: var(--text-color); }
+body { 
+    margin: 0; 
+    font-family: var(--font-main); 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
 nav { 
     display: flex; justify-content: space-between; padding: 15px 50px; 
@@ -19,6 +27,8 @@ nav {
 
 .menu a { text-decoration: none; color: var(--text-color); margin-left: 20px; font-weight: 700; }
 .menu a.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
+
+main { flex: 1; } /* Pcha stopkę na dół */
 
 .gallery-grid { 
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -51,25 +61,26 @@ nav {
 .main-img-container { 
     width: 100%; height: 650px; background: #f9f9f9; border-radius: 15px; 
     position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
-    cursor: grab; touch-action: none; /* Ważne dla urządzeń dotykowych */
+    cursor: grab; touch-action: none;
 }
-.main-img-container:active { cursor: grabbing; }
 
 #main-lb-img { 
     max-width: 100%; max-height: 100%; object-fit: contain; 
-    transition: transform 0.1s ease-out; transform-origin: center;
-    user-select: none; -webkit-user-drag: none;
+    transition: transform 0.1s ease-out;
+    /* FIX NA BIAŁE LINIE/KRATKĘ: */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    image-rendering: -webkit-optimize-contrast;
 }
 
-.zoom-controls {
-    position: absolute; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 10;
-}
+.zoom-controls { position: absolute; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 10; }
 .zoom-controls button {
     width: 45px; height: 45px; border-radius: 50%; border: none; 
-    background: var(--accent-color); color: white; font-size: 1.5rem; 
+    background: var(--accent-color); color: white; font-size: 1.1rem; 
     cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.2s;
+    font-weight: bold;
 }
-.zoom-controls button:hover { transform: scale(1.1); background: #ff4da6; }
 
 .thumbnails-container { display: flex; gap: 12px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px; }
 .thumbnails-container img { width: 80px; height: 80px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 3px solid transparent; }
@@ -78,6 +89,28 @@ nav {
 .lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.8rem; margin: 0; }
 .buy-btn { background: var(--accent-color); color: white; padding: 20px; text-align: center; border-radius: 40px; text-decoration: none; font-weight: bold; margin-top: auto; }
 .close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; }
+
+/* FOOTER */
+footer {
+    padding: 40px 20px;
+    text-align: center;
+    background: white;
+    margin-top: 50px;
+}
+footer p {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+.instagram-link {
+    color: #bbb; /* Szary kolor ikonki */
+    font-size: 1.5rem;
+    transition: 0.3s;
+    text-decoration: none;
+}
+.instagram-link:hover {
+    color: var(--accent-color);
+}
 
 @media (max-width: 1000px) { 
     .lightbox-content { flex-direction: column; overflow-y: auto; }
