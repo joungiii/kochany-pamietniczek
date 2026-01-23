@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kochany Pamiętniczku Art</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo-link">
+            <div class="logo">Kochany Pamiętniczku Art 💖</div>
+        </a>
+        <div class="menu">
+            <a href="index.html" class="active">Galeria</a>
+            <a href="kontakt.html">Kontakt</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="gallery-grid">
+            <div class="art-piece" onclick="openLightbox('obraz1')">
+                <img src="img/obraz1/obraz1.png" alt="Obraz 1">
+                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+            </div>
+
+            <div class="art-piece" onclick="openLightbox('obraz2')">
+                <img src="img/obraz2/obraz2.png" alt="Obraz 2">
+                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+            </div>
+
+            <div class="art-piece" onclick="openLightbox('obraz3')">
+                <img src="img/obraz3/obraz3.png" alt="Obraz 3">
+                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <div class="lightbox-gallery">
+                <div class="main-img-container">
+                    <img id="main-lb-img" src="" alt="Podgląd">
+                </div>
+                <div id="lb-thumbnails" class="thumbnails-container"></div>
+            </div>
+            <div class="lightbox-info">
+                <h2 id="lb-title"></h2>
+                <p id="lb-desc">Opis Twojego dzieła, technika i format.</p>
+                <p class="price" id="lb-price">Cena: Na zapytanie</p>
+                <a href="kontakt.html" class="buy-btn">Chcę to kupić! 💌</a>
