@@ -1,9 +1,10 @@
+let currentAlbum = []; 
 let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 const formats = ['jpg', 'png', 'jpeg', 'JPG', 'PNG'];
 
-// Funkcja sprawdzająca czy plik istnieje
+// 1. WCZYTYWANIE OBRAZÓW (Twoja działająca wersja)
 async function checkImage(url) {
     return new Promise(resolve => {
         const img = new Image();
@@ -13,7 +14,6 @@ async function checkImage(url) {
     });
 }
 
-// Naprawa galerii głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -25,9 +25,9 @@ async function fixMainGallery() {
     }
 }
 
-// Otwieranie Lightboxa
+// 2. LIGHTBOX
 async function openLightbox(folderName) {
-    const imgElement = document.getElementById('main-lb-img');
+    resetZoom();
     let foundPath = "";
     for (let ext of formats) {
         let path = `img/${folderName}/${folderName}.${ext}`;
@@ -35,13 +35,13 @@ async function openLightbox(folderName) {
     }
     
     if (foundPath) {
-        imgElement.src = foundPath;
-        document.getElementById('lb-title').innerText = folderName;
+        document.getElementById('main-lb-img').src = foundPath;
+        document.getElementById('lb-title').innerText = "Dzieło: " + folderName;
         document.getElementById('lightbox').style.display = 'flex';
-        resetZoom();
     }
 }
 
+// 3. ZOOM I PRZESUWANIE (Kliknij i trzymaj)
 function changeZoom(amount) {
     scale = Math.min(Math.max(1, scale + amount), 5);
     applyTransform();
@@ -57,17 +57,15 @@ function applyTransform() {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// LOGIKA DRAG & DROP (KLIKNIJ I TRZYMAJ)
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
 
     zoomBox.addEventListener('mousedown', (e) => {
         if (scale > 1) {
             isDragging = true;
-            // Zapamiętujemy punkt startu względem obecnego przesunięcia
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
-            e.preventDefault(); // TO JEST KLUCZ - blokuje domyślne przeciąganie obrazka przez przeglądarkę
+            e.preventDefault(); // Blokuje domyślne przeciąganie obrazka
         }
     });
 
@@ -82,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isDragging = false;
     });
 
-    // Zoom na kółku myszy
     zoomBox.addEventListener('wheel', (e) => {
         e.preventDefault();
         changeZoom(e.deltaY > 0 ? -0.2 : 0.2);
@@ -91,10 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
-// Zamykanie po kliknięciu w czarne tło
-window.onclick = function(event) {
-    const lb = document.getElementById('lightbox');
-    if (event.target == lb) closeLightbox();
+// Zamykanie po kliknięciu poza okno
+window.onclick = function(e) {
+    if (e.target == document.getElementById('lightbox')) closeLightbox();
 }
 
 window.onload = fixMainGallery;
