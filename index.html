@@ -32,7 +32,7 @@
             </div>
 
             <div class="art-piece" onclick="openLightbox('obraz3')">
-                <img src="img/obraz3/obraz3.png" onerror="this.src='img/obraz3/obraz3.jpg'" alt="Obraz 3">
+                <img src="img/obraz3/obraz3.png" onerror="this.src='img/obraz3/obraz3.jpg'; this.onerror=()=>this.src='img/obraz3/obraz3.jpeg'" alt="Obraz 3">
                 <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
         </div>
@@ -42,18 +42,26 @@
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-content">
             <div class="lightbox-gallery">
-                <div class="main-img-container">
+                <div class="main-img-container" onclick="openFullscreen()">
                     <img id="main-lb-img" src="" alt="Podgląd">
+                    <div class="zoom-hint">Kliknij, aby powiększyć 🔍</div>
                 </div>
                 <div id="lb-thumbnails" class="thumbnails-container"></div>
             </div>
             <div class="lightbox-info">
-                <h2 id="lb-title">Tytuł obrazu</h2>
+                <h2 id="lb-title"></h2>
                 <p id="lb-desc">Opis Twojej sztuki, technika i emocje.</p>
                 <p class="price" id="lb-price">Cena: Kontakt mailowy</p>
                 <a href="kontakt.html" class="buy-btn">Chcę to kupić! 💌</a>
             </div>
         </div>
+    </div>
+
+    <div id="fullscreen-view" class="fullscreen-overlay">
+        <span class="fs-close" onclick="closeFullscreen()">&times;</span>
+        <button class="fs-nav prev" onclick="changeFsImg(-1)">&#10094;</button>
+        <img id="fs-img" src="" alt="Full Screen">
+        <button class="fs-nav next" onclick="changeFsImg(1)">&#10095;</button>
     </div>
 
     <script src="script.js"></script>
