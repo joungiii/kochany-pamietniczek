@@ -3,23 +3,26 @@
     --text-color: #4A4A4A;
     --font-hand: 'Patrick Hand', cursive;
     --font-main: 'Quicksand', sans-serif;
-    /* Twoje 70% przezroczystości */
-    --glass: rgba(255, 255, 255, 0.7);
 }
 
 * { box-sizing: border-box; }
 
 body { 
-    margin: 0; font-family: var(--font-main); color: var(--text-color); 
-    display: flex; flex-direction: column; min-height: 100vh; 
+    margin: 0; 
+    font-family: var(--font-main); 
+    color: var(--text-color); 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    /* Twoje tło na całej stronie */
     background: url('img/tlo.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
-/* Przezroczyste sekcje */
+/* 70% PRZEZROCZYSTOŚCI DLA HEADER, FOOTER I KART */
 nav, footer, .art-piece, .contact-box { 
-    background: var(--glass) !important; 
-    backdrop-filter: blur(5px); /* Efekt szronu */
+    background: rgba(255, 255, 255, 0.7) !important; 
+    backdrop-filter: blur(5px); 
 }
 
 nav { 
@@ -46,43 +49,48 @@ nav {
 
 .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* Lightbox */
+/* LIGHTBOX - STABILNY UKŁAD */
 .lightbox { 
     display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
-    width: 100%; height: 100%; background: rgba(0,0,0,0.9); 
-    justify-content: center; align-items: center;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.85); 
+    justify-content: center; align-items: center; 
 }
+
 .lightbox-content { 
-    background: white; padding: 25px; border-radius: 20px; display: flex; 
-    gap: 20px; max-width: 95%; max-height: 90vh; position: relative;
+    background: white; padding: 30px; border-radius: 25px; display: flex; 
+    gap: 30px; max-width: 1400px; width: 95%; max-height: 90vh; position: relative; 
 }
+
 .main-img-container { 
-    width: 600px; height: 600px; background: #eee; border-radius: 10px; 
-    overflow: hidden; position: relative; cursor: grab;
-    display: flex; justify-content: center; align-items: center;
+    width: 100%; height: 600px; background: #f9f9f9; border-radius: 15px; 
+    position: relative; overflow: hidden; display: flex; 
+    justify-content: center; align-items: center; cursor: grab; 
 }
-.main-img-container:active { cursor: grabbing; }
 
-/* Kluczowe: wyłączamy domyślny drag obrazka */
 #main-lb-img { 
-    max-width: 100%; max-height: 100%; 
-    user-select: none; 
-    -webkit-user-drag: none;
-    transition: transform 0.05s linear; 
+    max-width: 100%; max-height: 100%; object-fit: contain; 
+    transition: transform 0.1s ease-out;
+    user-select: none; /* Blokuje zaznaczanie obrazka */
 }
 
-.lightbox-info { width: 300px; display: flex; flex-direction: column; }
-.buy-btn { background: var(--accent-color); color: white; padding: 15px; text-align: center; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: auto; }
+.lightbox-info { flex: 1; display: flex; flex-direction: column; min-width: 300px; }
+.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.5rem; margin: 0; }
 
-.zoom-controls { position: absolute; bottom: 10px; left: 10px; display: flex; gap: 5px; }
-.zoom-controls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent-color); color: white; cursor: pointer; font-weight: bold; }
+.buy-btn { 
+    background: var(--accent-color); color: white; padding: 18px; 
+    text-align: center; border-radius: 40px; text-decoration: none; 
+    font-weight: bold; display: block; width: 100%; margin-top: auto;
+}
 
-.close-btn { position: absolute; top: -40px; right: 0; color: white; font-size: 40px; cursor: pointer; }
+.zoom-controls { position: absolute; bottom: 20px; left: 20px; display: flex; gap: 10px; z-index: 10; }
+.zoom-controls button { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--accent-color); color: white; cursor: pointer; }
 
-/* Kontakt */
-.contact-container { display: flex; justify-content: center; padding: 50px; }
-.contact-box { padding: 40px; border-radius: 30px; max-width: 500px; width: 100%; text-align: center; }
-.contact-form { display: flex; flex-direction: column; gap: 10px; }
-.contact-form input, .contact-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 10px; }
+.close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; }
 
-@media (max-width: 900px) { .lightbox-content { flex-direction: column; } .main-img-container { width: 100%; height: 300px; } }
+/* KONTAKT */
+.contact-container { display: flex; justify-content: center; padding: 50px 20px; }
+.contact-box { padding: 40px; border-radius: 30px; max-width: 600px; width: 100%; text-align: center; }
+
+footer { padding: 30px; text-align: center; margin-top: auto; }
+
+@media (max-width: 1000px) { .lightbox-content { flex-direction: column; overflow-y: auto; } .main-img-container { height: 350px; } }
