@@ -22,18 +22,18 @@
     <main>
         <div class="gallery-grid">
             <div class="art-piece" onclick="openLightbox('obraz1')">
-                <img src="img/obraz1/obraz1.png" alt="Obraz 1">
-                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+                <img src="img/obraz1/obraz1.png" onerror="this.src='img/obraz1/obraz1.jpg'" alt="Obraz 1">
+                <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
 
             <div class="art-piece" onclick="openLightbox('obraz2')">
-                <img src="img/obraz2/obraz2.png" alt="Obraz 2">
-                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+                <img src="img/obraz2/obraz2.png" onerror="this.src='img/obraz2/obraz2.jpg'" alt="Obraz 2">
+                <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
 
             <div class="art-piece" onclick="openLightbox('obraz3')">
-                <img src="img/obraz3/obraz3.png" alt="Obraz 3">
-                <div class="overlay"><span>Otwórz Pamiętniczek ✨</span></div>
+                <img src="img/obraz3/obraz3.png" onerror="this.src='img/obraz3/obraz3.jpg'" alt="Obraz 3">
+                <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
         </div>
     </main>
@@ -48,7 +48,14 @@
                 <div id="lb-thumbnails" class="thumbnails-container"></div>
             </div>
             <div class="lightbox-info">
-                <h2 id="lb-title"></h2>
-                <p id="lb-desc">Opis Twojego dzieła, technika i format.</p>
-                <p class="price" id="lb-price">Cena: Na zapytanie</p>
+                <h2 id="lb-title">Tytuł obrazu</h2>
+                <p id="lb-desc">Opis Twojej sztuki, technika i emocje.</p>
+                <p class="price" id="lb-price">Cena: Kontakt mailowy</p>
                 <a href="kontakt.html" class="buy-btn">Chcę to kupić! 💌</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
