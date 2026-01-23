@@ -2,7 +2,15 @@ let currentAlbum = [];
 let currentIndex = 0;   
 const formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
 
-// Automatyczne naprawianie miniaturek na stronie głównej
+// Zmienne do Zoomu i Przesuwania
+let scale = 1;
+let isDragging = false;
+let startX, startY, translateX = 0, translateY = 0;
+
+const imgElement = document.getElementById('main-lb-img');
+const container = document.getElementById('zoom-container');
+
+// Naprawa miniatur na starcie
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -22,6 +30,7 @@ async function openLightbox(folderName) {
     const thumbContainer = document.getElementById('lb-thumbnails');
     const title = document.getElementById('lb-title');
     
+    resetZoom(); // Resetujemy zoom przy otwieraniu nowej galerii
     thumbContainer.innerHTML = 'Wczytywanie...';
     title.innerText = "Dzieło: " + folderName;
     currentAlbum = [];
@@ -52,6 +61,7 @@ async function openLightbox(folderName) {
                 e.stopPropagation();
                 currentIndex = idx;
                 mainImg.src = path;
+                resetZoom();
                 updateThumbnails();
             };
             thumbContainer.appendChild(thumb);
@@ -70,25 +80,52 @@ function checkImage(url) {
     });
 }
 
-function openFullscreen() {
-    const fsOverlay = document.getElementById('fullscreen-view');
-    const fsImg = document.getElementById('fs-img');
-    fsImg.src = currentAlbum[currentIndex];
-    fsOverlay.style.display = 'flex';
+// LOGIKA ZOOMU
+function changeZoom(amount) {
+    scale += amount;
+    if (scale < 1) scale = 1;
+    if (scale > 4) scale = 4;
+    applyTransform();
 }
 
-function closeFullscreen() {
-    document.getElementById('fullscreen-view').style.display = 'none';
+function resetZoom() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    applyTransform();
 }
 
-function changeFsImg(direction) {
-    currentIndex += direction;
-    if (currentIndex >= currentAlbum.length) currentIndex = 0;
-    if (currentIndex < 0) currentIndex = currentAlbum.length - 1;
-    document.getElementById('fs-img').src = currentAlbum[currentIndex];
-    document.getElementById('main-lb-img').src = currentAlbum[currentIndex];
-    updateThumbnails();
+function applyTransform() {
+    const img = document.getElementById('main-lb-img');
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
+
+// PRZESUWANIE (PANNING)
+container.addEventListener('mousedown', (e) => {
+    if (scale <= 1) return;
+    isDragging = true;
+    startX = e.clientX - translateX;
+    startY = e.clientY - translateY;
+});
+
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    applyTransform();
+});
+
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// Scroll myszką też przybliża
+container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.2 : 0.2;
+    changeZoom(delta);
+}, { passive: false });
+
 
 function closeLightbox() {
     document.getElementById('lightbox').style.display = 'none';
@@ -102,20 +139,13 @@ function updateThumbnails() {
 }
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-        if (document.getElementById('fullscreen-view').style.display === 'flex') closeFullscreen();
-        else closeLightbox();
-    }
-    if (document.getElementById('fullscreen-view').style.display === 'flex') {
-        if (e.key === "ArrowRight") changeFsImg(1);
-        if (e.key === "ArrowLeft") changeFsImg(-1);
-    }
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "+" || e.key === "=") changeZoom(0.2);
+    if (e.key === "-") changeZoom(-0.2);
 });
 
 window.onclick = function(event) {
     if (event.target == document.getElementById('lightbox')) closeLightbox();
-    if (event.target == document.getElementById('fullscreen-view')) closeFullscreen();
 }
 
-// Uruchomienie naprawy galerii przy starcie strony
 window.onload = fixMainGallery;
