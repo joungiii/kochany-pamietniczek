@@ -6,9 +6,6 @@ let scale = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 
-const imgElement = () => document.getElementById('main-lb-img');
-const container = () => document.getElementById('zoom-container');
-
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
     for (let img of thumbs) {
@@ -68,7 +65,6 @@ function checkImage(url) {
     });
 }
 
-// ZOOM I TRANSFORMACJA
 function changeZoom(amount) {
     scale += amount;
     if (scale < 1) scale = 1;
@@ -82,41 +78,37 @@ function resetZoom() {
 }
 
 function applyTransform() {
-    const img = imgElement();
-    const cont = container();
+    const img = document.getElementById('main-lb-img');
+    const cont = document.getElementById('zoom-container');
     if (!img || !cont) return;
 
-    // Obliczanie granic (hamulce)
     if (scale > 1) {
         const maxW = (cont.offsetWidth * scale - cont.offsetWidth) / 2;
         const maxH = (cont.offsetHeight * scale - cont.offsetHeight) / 2;
-
         if (Math.abs(translateX) > maxW) translateX = translateX > 0 ? maxW : -maxW;
         if (Math.abs(translateY) > maxH) translateY = translateY > 0 ? maxH : -maxH;
     } else {
-        translateX = 0;
-        translateY = 0;
+        translateX = 0; translateY = 0;
     }
-
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// OBSŁUGA SCROLLA (MYSZKA)
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
-    zoomBox.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.3 : 0.3;
-        changeZoom(delta);
-    }, { passive: false });
+    if(zoomBox) {
+        zoomBox.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.3 : 0.3;
+            changeZoom(delta);
+        }, { passive: false });
 
-    // PRZESUWANIE MYSZKĄ
-    zoomBox.addEventListener('mousedown', (e) => {
-        if (scale <= 1) return;
-        isDragging = true;
-        startX = e.clientX - translateX;
-        startY = e.clientY - translateY;
-    });
+        zoomBox.addEventListener('mousedown', (e) => {
+            if (scale <= 1) return;
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        });
+    }
 });
 
 window.addEventListener('mousemove', (e) => {
