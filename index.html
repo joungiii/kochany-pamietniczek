@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria - Kochany Pamiętniczku Art</title>
+    <title>Kochany Pamiętniczku Art</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -22,15 +22,21 @@
             <div class="art-piece" onclick="openLightbox('obraz1')">
                 <img class="auto-thumb" data-folder="obraz1" alt="Obraz 1">
             </div>
+            <div class="art-piece" onclick="openLightbox('obraz2')">
+                <img class="auto-thumb" data-folder="obraz2" alt="Obraz 2">
             </div>
+            <div class="art-piece" onclick="openLightbox('obraz3')">
+                <img class="auto-thumb" data-folder="obraz3" alt="Obraz 3">
+            </div>
+        </div>
     </main>
 
     <div id="lightbox" class="lightbox" onclick="closeLightboxOutside(event)">
-        <span onclick="closeLightbox()" style="position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;">&times;</span>
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-content" onclick="event.stopPropagation()">
             <div class="lightbox-gallery">
                 <div class="main-img-container" id="zoom-container">
-                    <img id="main-lb-img" src="">
+                    <img id="main-lb-img" src="" alt="Podgląd">
                     <div class="zoom-controls">
                         <button onclick="changeZoom(0.2)">+</button>
                         <button onclick="changeZoom(-0.2)">-</button>
@@ -41,13 +47,16 @@
             </div>
             <div class="lightbox-info">
                 <h2 id="lb-title"></h2>
-                <p>Oryginalna praca wykonana z miłością.</p>
-                <a href="kontakt.html" class="buy-btn">Zapytaj o obraz 💌</a>
+                <p>Oryginalna praca wykonana z miłością. Zapraszam do kontaktu w celu zakupu.</p>
+                <a href="kontakt.html" class="buy-btn">Chcę to kupić! 💌</a>
             </div>
         </div>
     </div>
 
-    <footer><p>&copy; Kochany Pamiętniczku Art 2026</p></footer>
+    <footer>
+        <p>&copy; Kochany Pamiętniczku Art 2026</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
