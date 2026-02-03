@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kochany Pamiętniczku Art</title>
+    <title>Galeria - Kochany Pamiętniczku Art</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <nav>
         <a href="index.html" class="logo-link"><div class="logo">Kochany Pamiętniczku Art 💖</div></a>
         <div class="menu">
             <a href="index.html" class="active">Galeria</a>
+            <a href="omnie.html">O mnie</a>
             <a href="kontakt.html">Kontakt</a>
         </div>
     </nav>
@@ -21,25 +21,16 @@
         <div class="gallery-grid">
             <div class="art-piece" onclick="openLightbox('obraz1')">
                 <img class="auto-thumb" data-folder="obraz1" alt="Obraz 1">
-                <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
-            <div class="art-piece" onclick="openLightbox('obraz2')">
-                <img class="auto-thumb" data-folder="obraz2" alt="Obraz 2">
-                <div class="overlay"><span>Zobacz ✨</span></div>
             </div>
-            <div class="art-piece" onclick="openLightbox('obraz3')">
-                <img class="auto-thumb" data-folder="obraz3" alt="Obraz 3">
-                <div class="overlay"><span>Zobacz ✨</span></div>
-            </div>
-        </div>
     </main>
 
     <div id="lightbox" class="lightbox" onclick="closeLightboxOutside(event)">
-        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <span onclick="closeLightbox()" style="position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;">&times;</span>
         <div class="lightbox-content" onclick="event.stopPropagation()">
             <div class="lightbox-gallery">
                 <div class="main-img-container" id="zoom-container">
-                    <img id="main-lb-img" src="" alt="Podgląd">
+                    <img id="main-lb-img" src="">
                     <div class="zoom-controls">
                         <button onclick="changeZoom(0.2)">+</button>
                         <button onclick="changeZoom(-0.2)">-</button>
@@ -50,18 +41,13 @@
             </div>
             <div class="lightbox-info">
                 <h2 id="lb-title"></h2>
-                <p id="lb-desc">Opis Twojej sztuki, technika i emocje.</p>
-                <p class="price" id="lb-price">Cena: Kontakt mailowy</p>
-                <a href="kontakt.html" class="buy-btn">Chcę to kupić! 💌</a>
+                <p>Oryginalna praca wykonana z miłością.</p>
+                <a href="kontakt.html" class="buy-btn">Zapytaj o obraz 💌</a>
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; Kochany Pamiętniczku Art 2026</p>
-        <a href="https://www.instagram.com/kochany.pamietniczku.art/" target="_blank" class="instagram-link"><i class="fab fa-instagram"></i></a>
-    </footer>
-
+    <footer><p>&copy; Kochany Pamiętniczku Art 2026</p></footer>
     <script src="script.js"></script>
 </body>
 </html>
