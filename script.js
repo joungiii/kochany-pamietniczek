@@ -5,6 +5,7 @@ let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 const formats = ['jpg', 'png', 'jpeg', 'JPG', 'PNG'];
 
+// Funkcja sprawdzająca czy obraz istnieje
 async function checkImage(url) {
     return new Promise(resolve => {
         const img = new Image();
@@ -14,8 +15,11 @@ async function checkImage(url) {
     });
 }
 
+// Naprawa miniatur na stronie głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
+    if (thumbs.length === 0) return; // Jeśli nie ma galerii na stronie, wyjdź
+
     for (let img of thumbs) {
         const folder = img.getAttribute('data-folder');
         for (let ext of formats) {
@@ -25,11 +29,12 @@ async function fixMainGallery() {
     }
 }
 
+// Otwieranie Lightboxa
 async function openLightbox(folderName) {
     resetZoom();
     currentAlbum = [];
     const thumbContainer = document.getElementById('lb-thumbnails');
-    if(thumbContainer) thumbContainer.innerHTML = '';
+    if (thumbContainer) thumbContainer.innerHTML = '';
 
     for (let i = 0; i <= 10; i++) {
         let name = (i === 0) ? folderName : `${folderName}-${i}`;
@@ -44,19 +49,30 @@ async function openLightbox(folderName) {
 
     if (currentAlbum.length > 0) {
         currentIndex = 0;
-        document.getElementById('main-lb-img').src = currentAlbum[0];
-        if(thumbContainer) {
+        const mainImg = document.getElementById('main-lb-img');
+        if (mainImg) mainImg.src = currentAlbum[0];
+        
+        if (thumbContainer) {
             currentAlbum.forEach((path, idx) => {
                 const thumb = document.createElement('img');
                 thumb.src = path;
-                thumb.onclick = (e) => { e.stopPropagation(); currentIndex = idx; document.getElementById('main-lb-img').src = path; resetZoom(); updateThumbnails(); };
+                thumb.onclick = (e) => {
+                    e.stopPropagation();
+                    currentIndex = idx;
+                    if (mainImg) mainImg.src = path;
+                    resetZoom();
+                    updateThumbnails();
+                };
                 thumbContainer.appendChild(thumb);
             });
             updateThumbnails();
         }
     }
-    document.getElementById('lb-title').innerText = folderName;
-    document.getElementById('lightbox').style.display = 'flex';
+    const title = document.getElementById('lb-title');
+    if (title) title.innerText = "Dzieło: " + folderName;
+    
+    const lb = document.getElementById('lightbox');
+    if (lb) lb.style.display = 'flex';
 }
 
 function updateThumbnails() {
@@ -72,16 +88,22 @@ function changeZoom(amount) {
     applyTransform();
 }
 
-function resetZoom() { scale = 1; translateX = 0; translateY = 0; applyTransform(); }
+function resetZoom() {
+    scale = 1; translateX = 0; translateY = 0;
+    applyTransform();
+}
 
 function applyTransform() {
     const img = document.getElementById('main-lb-img');
-    if(img) img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    if (img) img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
+// Obsługa Drag & Drop i kółka myszy
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
-    if(zoomBox) {
+
+    // Wykonuj tylko jeśli zoom-container istnieje na stronie
+    if (zoomBox) {
         zoomBox.addEventListener('mousedown', (e) => {
             if (scale > 1) {
                 isDragging = true;
@@ -90,13 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
             }
         });
+
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             translateX = e.clientX - startX;
             translateY = e.clientY - startY;
             applyTransform();
         });
+
         window.addEventListener('mouseup', () => { isDragging = false; });
+
         zoomBox.addEventListener('wheel', (e) => {
             e.preventDefault();
             changeZoom(e.deltaY > 0 ? -0.2 : 0.2);
@@ -104,6 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-function closeLightboxOutside(e) { if (e.target.id === 'lightbox') closeLightbox(); }
+function closeLightbox() { 
+    const lb = document.getElementById('lightbox');
+    if (lb) lb.style.display = 'none'; 
+}
+
+function closeLightboxOutside(e) { 
+    if (e.target.id === 'lightbox') closeLightbox(); 
+}
+
 window.onload = fixMainGallery;
