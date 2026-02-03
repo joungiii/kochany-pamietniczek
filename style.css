@@ -30,7 +30,7 @@ nav, footer, .art-piece, .contact-box, .about-box {
     border-radius: 20px;
 }
 
-/* NAWIGACJA */
+/* NAWIGACJA - WYCENTROWANA */
 nav { 
     display: flex; 
     justify-content: space-between; 
@@ -48,19 +48,20 @@ nav {
 .menu a { text-decoration: none; color: var(--text-color); margin-left: 20px; font-weight: 700; transition: 0.3s; }
 .menu a:hover, .menu a.active { color: var(--accent-color); }
 
-/* GALERIA GŁÓWNA */
+/* GALERIA GŁÓWNA - POPRAWIONE CENTROWANIE */
 .gallery-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 25px; 
     padding: 40px; 
-    max-width: 1400px; 
-    margin: 0 auto; 
+    max-width: 1200px; /* Powrót do klasycznej szerokości */
+    margin: 0 auto; /* Idealne wyśrodkowanie */
 }
+
 .art-piece { border-radius: 20px; overflow: hidden; cursor: pointer; aspect-ratio: 4 / 5; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* LIGHTBOX - ZMODYFIKOWANE WYMIARY */
+/* LIGHTBOX - ZOPTYMALIZOWANE WYMIARY */
 .lightbox { 
     display: none; 
     position: fixed; 
@@ -69,25 +70,25 @@ nav {
     top: 0; 
     width: 100%; 
     height: 100%; 
-    background: rgba(0,0,0,0.92); 
+    background: rgba(0,0,0,0.9); 
     justify-content: center; 
     align-items: center; 
 }
 
 .lightbox-content { 
     background: white; 
-    padding: 20px; 
+    padding: 25px; 
     border-radius: 25px; 
     display: flex; 
-    gap: 20px; 
-    width: 98%; 
-    max-width: 1800px; /* Jeszcze szerszy, żeby zdjęcie miało miejsce */
-    max-height: 96vh; 
+    gap: 25px; 
+    width: 90%; 
+    max-width: 1250px; /* Zwężony kontener dla lepszego wyglądu */
+    max-height: 92vh; 
     position: relative; 
 }
 
 .lightbox-gallery { 
-    flex: 4; /* ZWIĘKSZONE: zdjęcie zajmuje teraz większość miejsca */
+    flex: 3; 
     display: flex; 
     flex-direction: column; 
     height: 100%;
@@ -95,7 +96,7 @@ nav {
 
 .main-img-container { 
     width: 100%; 
-    height: 80vh; /* ZWIĘKSZONE: zdjęcie jest wyższe */
+    height: 75vh; 
     background: #fcfcfc; 
     border-radius: 15px; 
     position: relative; 
@@ -111,27 +112,28 @@ nav {
     max-height: 100%; 
     object-fit: contain; 
     transition: transform 0.1s ease-out; 
-    user-select: none;
 }
 
-/* PANEL BOCZNY W LIGHTBOXIE */
+/* PANEL BOCZNY - SMUKŁY */
 .lightbox-info { 
-    flex: 0.7; /* ZMNIEJSZONE: opis jest teraz węższy */
+    flex: 1; 
     display: flex; 
     flex-direction: column; 
-    min-width: 220px; 
+    min-width: 250px; 
     padding: 10px;
     border-left: 1px solid #eee;
 }
 
-.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2rem; margin: 0 0 10px 0; }
-.lightbox-info p { font-size: 0.9rem; line-height: 1.4; color: #666; }
+.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.2rem; margin: 0 0 10px 0; }
+.lightbox-info p { font-size: 0.95rem; line-height: 1.5; color: #555; }
 
-/* MNIEJSZY PRZYCISK W LIGHTBOXIE */
+/* MNIEJSZY PRZYCISK KONTAKTU */
 .lightbox-info .buy-btn { 
     padding: 12px 20px; 
     font-size: 0.9rem; 
     margin-top: auto; 
+    width: auto; /* Przycisk nie musi być na całą szerokość panelu */
+    align-self: flex-start;
 }
 
 .zoom-controls { 
@@ -141,6 +143,7 @@ nav {
     display: flex; 
     gap: 8px; 
 }
+
 .zoom-controls button { 
     width: 35px; height: 35px; border-radius: 50%; border: none; 
     background: var(--accent-color); color: white; cursor: pointer; 
@@ -150,43 +153,45 @@ nav {
 .thumbnails-container { 
     display: flex; 
     gap: 8px; 
-    margin-top: 10px; 
+    margin-top: 15px; 
     overflow-x: auto; 
 }
+
 .thumbnails-container img { 
-    width: 60px; 
-    height: 60px; 
-    object-fit: cover; 
-    cursor: pointer; 
-    border-radius: 8px; 
-    border: 2px solid transparent; 
+    width: 65px; height: 65px; object-fit: cover; cursor: pointer; 
+    border-radius: 8px; border: 2px solid transparent; 
 }
 
-/* STRONA KONTAKT I O MNIE */
-.contact-container, .about-container { display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
-.contact-box, .about-box { padding: 40px; max-width: 600px; width: 100%; text-align: center; }
+/* KONTAKT I O MNIE - SPÓJNE WYMIARY */
+.contact-container, .about-container { display: flex; justify-content: center; align-items: center; padding: 50px 20px; }
+.contact-box, .about-box { padding: 40px; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+.contact-box { max-width: 600px; width: 100%; }
 .about-box { max-width: 1000px; }
-.about-content { display: flex; gap: 40px; align-items: center; }
-.about-image img { width: 100%; max-width: 300px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-.about-text { flex: 1; text-align: left; }
-.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3rem; margin-bottom: 10px; }
 
-/* OGÓLNY STYL PRZYCISKU */
+.about-content { display: flex; gap: 40px; align-items: center; }
+.about-image img { width: 100%; max-width: 320px; border-radius: 30px; }
+.about-text { flex: 1; text-align: left; }
+.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3.2rem; }
+
+/* PRZYCISKI GŁÓWNE */
 .buy-btn { 
-    background: var(--accent-color); color: white; padding: 18px; 
+    background: var(--accent-color); color: white; padding: 16px 30px; 
     text-align: center; border-radius: 40px; text-decoration: none; 
     font-weight: bold; border: none; cursor: pointer; transition: 0.3s; 
-    display: block; width: 100%;
 }
+
 .buy-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3); }
 
-footer { padding: 20px; text-align: center; border-radius: 0; }
+footer { padding: 30px; text-align: center; margin-top: 20px; }
+
+.close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; z-index: 10; }
 
 /* RESPONSYWNOŚĆ */
 @media (max-width: 1000px) {
-    .lightbox-content { flex-direction: column; overflow-y: auto; }
-    .main-img-container { height: 350px; }
-    .lightbox-info { border-left: none; border-top: 1px solid #eee; padding-top: 20px; }
+    .lightbox-content { flex-direction: column; overflow-y: auto; width: 95%; }
+    .main-img-container { height: 400px; }
+    .lightbox-info { border-left: none; border-top: 1px solid #eee; margin-top: 15px; }
     .about-content { flex-direction: column; text-align: center; }
     .about-text { text-align: center; }
+    nav { padding: 15px 20px; }
 }
