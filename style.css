@@ -1,3 +1,4 @@
+/* KONFIGURACJA KOLORÓW I CZCIONEK */
 :root {
     --accent-color: #FF69B4;
     --text-color: #4A4A4A;
@@ -9,23 +10,37 @@
 * { box-sizing: border-box; }
 
 body { 
-    margin: 0; font-family: var(--font-main); color: var(--text-color); 
-    display: flex; flex-direction: column; min-height: 100vh; 
+    margin: 0; 
+    font-family: var(--font-main); 
+    color: var(--text-color); 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
     background: url('img/tlo.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
-main { flex: 1; } /* Popycha stopkę na dół */
+main { flex: 1; }
 
+/* EFEKT SZKŁA */
 nav, footer, .art-piece, .contact-box, .about-box { 
     background: var(--glass-white) !important; 
     backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
 }
 
+/* NAWIGACJA */
 nav { 
-    display: flex; justify-content: space-between; padding: 15px 50px; 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 15px 50px; 
     box-shadow: 0 4px 15px rgba(255, 105, 180, 0.1); 
-    position: sticky; top: 0; z-index: 100; align-items: center;
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+    align-items: center;
+    border-radius: 0;
 }
 
 .logo-link { text-decoration: none; }
@@ -33,43 +48,145 @@ nav {
 .menu a { text-decoration: none; color: var(--text-color); margin-left: 20px; font-weight: 700; transition: 0.3s; }
 .menu a:hover, .menu a.active { color: var(--accent-color); }
 
-/* Galeria */
+/* GALERIA GŁÓWNA */
 .gallery-grid { 
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 25px; padding: 40px; max-width: 1200px; margin: 0 auto; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 25px; 
+    padding: 40px; 
+    max-width: 1400px; 
+    margin: 0 auto; 
 }
 .art-piece { border-radius: 20px; overflow: hidden; cursor: pointer; aspect-ratio: 4 / 5; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* Lightbox */
-.lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
-.lightbox-content { background: white; padding: 30px; border-radius: 25px; display: flex; gap: 30px; max-width: 1400px; width: 95%; max-height: 90vh; position: relative; }
-.main-img-container { width: 100%; height: 600px; background: #f5f5f5; border-radius: 15px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: grab; }
-#main-lb-img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s linear; user-select: none; -webkit-user-drag: none; }
+/* LIGHTBOX - ZMODYFIKOWANE WYMIARY */
+.lightbox { 
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.92); 
+    justify-content: center; 
+    align-items: center; 
+}
 
-.zoom-controls { position: absolute; bottom: 15px; left: 15px; display: flex; gap: 8px; z-index: 10; }
-.zoom-controls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent-color); color: white; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.lightbox-content { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 25px; 
+    display: flex; 
+    gap: 20px; 
+    width: 98%; 
+    max-width: 1800px; /* Jeszcze szerszy, żeby zdjęcie miało miejsce */
+    max-height: 96vh; 
+    position: relative; 
+}
 
-/* Formularz Kontaktowy */
-.contact-container { display: flex; justify-content: center; align-items: center; padding: 60px 20px; }
-.contact-box { padding: 50px; border-radius: 35px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-.contact-form { display: flex; flex-direction: column; gap: 15px; }
-.contact-form input, .contact-form textarea { padding: 18px; border: 2px solid rgba(255,105,180,0.1); border-radius: 20px; background: white; font-family: var(--font-main); font-size: 1rem; outline: none; transition: 0.3s; }
-.contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent-color); }
-.contact-form textarea { min-height: 180px; resize: none; }
+.lightbox-gallery { 
+    flex: 4; /* ZWIĘKSZONE: zdjęcie zajmuje teraz większość miejsca */
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
+}
 
-/* O mnie */
-.about-container { display: flex; justify-content: center; align-items: center; padding: 60px 20px; }
-.about-box { max-width: 900px; width: 100%; padding: 40px; border-radius: 35px; }
+.main-img-container { 
+    width: 100%; 
+    height: 80vh; /* ZWIĘKSZONE: zdjęcie jest wyższe */
+    background: #fcfcfc; 
+    border-radius: 15px; 
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: grab; 
+}
+
+#main-lb-img { 
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain; 
+    transition: transform 0.1s ease-out; 
+    user-select: none;
+}
+
+/* PANEL BOCZNY W LIGHTBOXIE */
+.lightbox-info { 
+    flex: 0.7; /* ZMNIEJSZONE: opis jest teraz węższy */
+    display: flex; 
+    flex-direction: column; 
+    min-width: 220px; 
+    padding: 10px;
+    border-left: 1px solid #eee;
+}
+
+.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2rem; margin: 0 0 10px 0; }
+.lightbox-info p { font-size: 0.9rem; line-height: 1.4; color: #666; }
+
+/* MNIEJSZY PRZYCISK W LIGHTBOXIE */
+.lightbox-info .buy-btn { 
+    padding: 12px 20px; 
+    font-size: 0.9rem; 
+    margin-top: auto; 
+}
+
+.zoom-controls { 
+    position: absolute; 
+    bottom: 15px; 
+    left: 15px; 
+    display: flex; 
+    gap: 8px; 
+}
+.zoom-controls button { 
+    width: 35px; height: 35px; border-radius: 50%; border: none; 
+    background: var(--accent-color); color: white; cursor: pointer; 
+    font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+}
+
+.thumbnails-container { 
+    display: flex; 
+    gap: 8px; 
+    margin-top: 10px; 
+    overflow-x: auto; 
+}
+.thumbnails-container img { 
+    width: 60px; 
+    height: 60px; 
+    object-fit: cover; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    border: 2px solid transparent; 
+}
+
+/* STRONA KONTAKT I O MNIE */
+.contact-container, .about-container { display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+.contact-box, .about-box { padding: 40px; max-width: 600px; width: 100%; text-align: center; }
+.about-box { max-width: 1000px; }
 .about-content { display: flex; gap: 40px; align-items: center; }
-.about-image img { width: 300px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3.5rem; margin: 0; }
+.about-image img { width: 100%; max-width: 300px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.about-text { flex: 1; text-align: left; }
+.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3rem; margin-bottom: 10px; }
 
-/* Wspólne */
-.buy-btn { background: var(--accent-color); color: white; padding: 18px; text-align: center; border-radius: 40px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; display: block; width: 100%; transition: 0.3s; }
-.buy-btn:hover { background: #ff4da6; transform: translateY(-2px); }
-.thumbnails-container { display: flex; gap: 10px; margin-top: 20px; overflow-x: auto; }
-.thumbnails-container img { width: 70px; height: 70px; object-fit: cover; cursor: pointer; border-radius: 10px; border: 3px solid transparent; }
-footer { padding: 30px; text-align: center; }
+/* OGÓLNY STYL PRZYCISKU */
+.buy-btn { 
+    background: var(--accent-color); color: white; padding: 18px; 
+    text-align: center; border-radius: 40px; text-decoration: none; 
+    font-weight: bold; border: none; cursor: pointer; transition: 0.3s; 
+    display: block; width: 100%;
+}
+.buy-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3); }
 
-@media (max-width: 1000px) { .lightbox-content { flex-direction: column; overflow-y: auto; } .main-img-container { height: 350px; } .about-content { flex-direction: column; text-align: center; } }
+footer { padding: 20px; text-align: center; border-radius: 0; }
+
+/* RESPONSYWNOŚĆ */
+@media (max-width: 1000px) {
+    .lightbox-content { flex-direction: column; overflow-y: auto; }
+    .main-img-container { height: 350px; }
+    .lightbox-info { border-left: none; border-top: 1px solid #eee; padding-top: 20px; }
+    .about-content { flex-direction: column; text-align: center; }
+    .about-text { text-align: center; }
+}
