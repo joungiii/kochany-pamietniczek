@@ -20,17 +20,16 @@ body {
     background-size: cover;
 }
 
-main { flex: 1; }
+main { flex: 1; width: 100%; }
 
 /* EFEKT SZKŁA */
 nav, footer, .art-piece, .contact-box, .about-box { 
     background: var(--glass-white) !important; 
     backdrop-filter: blur(8px); 
     -webkit-backdrop-filter: blur(8px);
-    border-radius: 20px;
 }
 
-/* NAWIGACJA - WYCENTROWANA */
+/* NAWIGACJA */
 nav { 
     display: flex; 
     justify-content: space-between; 
@@ -40,7 +39,6 @@ nav {
     top: 0; 
     z-index: 100; 
     align-items: center;
-    border-radius: 0;
 }
 
 .logo-link { text-decoration: none; }
@@ -48,20 +46,19 @@ nav {
 .menu a { text-decoration: none; color: var(--text-color); margin-left: 20px; font-weight: 700; transition: 0.3s; }
 .menu a:hover, .menu a.active { color: var(--accent-color); }
 
-/* GALERIA GŁÓWNA - POPRAWIONE CENTROWANIE */
+/* GALERIA GŁÓWNA */
 .gallery-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 25px; 
     padding: 40px; 
-    max-width: 1200px; /* Powrót do klasycznej szerokości */
-    margin: 0 auto; /* Idealne wyśrodkowanie */
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
-
 .art-piece { border-radius: 20px; overflow: hidden; cursor: pointer; aspect-ratio: 4 / 5; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .art-piece img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* LIGHTBOX - ZOPTYMALIZOWANE WYMIARY */
+/* LIGHTBOX - SMUKŁY I ELEGANCKI */
 .lightbox { 
     display: none; 
     position: fixed; 
@@ -82,115 +79,96 @@ nav {
     display: flex; 
     gap: 25px; 
     width: 90%; 
-    max-width: 1250px; /* Zwężony kontener dla lepszego wyglądu */
+    max-width: 1250px; 
     max-height: 92vh; 
     position: relative; 
 }
 
-.lightbox-gallery { 
-    flex: 3; 
-    display: flex; 
-    flex-direction: column; 
-    height: 100%;
-}
+.lightbox-gallery { flex: 3; display: flex; flex-direction: column; height: 100%; }
+.main-img-container { width: 100%; height: 75vh; background: #fcfcfc; border-radius: 15px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: grab; }
+#main-lb-img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
 
-.main-img-container { 
-    width: 100%; 
-    height: 75vh; 
-    background: #fcfcfc; 
-    border-radius: 15px; 
-    position: relative; 
-    overflow: hidden; 
+.lightbox-info { flex: 1; display: flex; flex-direction: column; min-width: 250px; padding: 10px; border-left: 1px solid #eee; }
+.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.2rem; margin: 0 0 10px 0; }
+.lightbox-info p { font-size: 0.95rem; line-height: 1.5; color: #555; }
+.lightbox-info .buy-btn { padding: 12px 20px; font-size: 0.9rem; margin-top: auto; align-self: flex-start; width: auto; }
+
+/* PRZYCISKI ZOOM */
+.zoom-controls { position: absolute; bottom: 15px; left: 15px; display: flex; gap: 8px; }
+.zoom-controls button { width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--accent-color); color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+/* MINIATURKI W LIGHTBOXIE */
+.thumbnails-container { display: flex; gap: 8px; margin-top: 15px; overflow-x: auto; }
+.thumbnails-container img { width: 65px; height: 65px; object-fit: cover; cursor: pointer; border-radius: 8px; border: 2px solid transparent; }
+
+/* FORMULARZ KONTAKTOWY - PRZYWRÓCONY */
+.contact-container { 
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    cursor: grab; 
+    padding: 60px 20px; 
 }
-
-#main-lb-img { 
-    max-width: 100%; 
-    max-height: 100%; 
-    object-fit: contain; 
-    transition: transform 0.1s ease-out; 
+.contact-box { 
+    padding: 50px; 
+    border-radius: 35px; 
+    max-width: 600px; 
+    width: 100%; 
+    text-align: center; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
 }
+.contact-form { display: flex; flex-direction: column; gap: 15px; }
+.contact-form input, .contact-form textarea { 
+    padding: 18px; 
+    border: 2px solid rgba(255,105,180,0.1); 
+    border-radius: 20px; 
+    background: white; 
+    font-family: var(--font-main); 
+    font-size: 1rem; 
+    outline: none;
+}
+.contact-form textarea { min-height: 180px; resize: none; }
 
-/* PANEL BOCZNY - SMUKŁY */
-.lightbox-info { 
-    flex: 1; 
+/* STRONA O MNIE - PRZYWRÓCONA */
+.about-container { 
     display: flex; 
-    flex-direction: column; 
-    min-width: 250px; 
-    padding: 10px;
-    border-left: 1px solid #eee;
+    justify-content: center; 
+    align-items: center; 
+    padding: 60px 20px; 
 }
-
-.lightbox-info h2 { font-family: var(--font-hand); color: var(--accent-color); font-size: 2.2rem; margin: 0 0 10px 0; }
-.lightbox-info p { font-size: 0.95rem; line-height: 1.5; color: #555; }
-
-/* MNIEJSZY PRZYCISK KONTAKTU */
-.lightbox-info .buy-btn { 
-    padding: 12px 20px; 
-    font-size: 0.9rem; 
-    margin-top: auto; 
-    width: auto; /* Przycisk nie musi być na całą szerokość panelu */
-    align-self: flex-start;
+.about-box { 
+    max-width: 1000px; 
+    width: 100%; 
+    padding: 50px; 
+    border-radius: 35px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
 }
-
-.zoom-controls { 
-    position: absolute; 
-    bottom: 15px; 
-    left: 15px; 
-    display: flex; 
-    gap: 8px; 
-}
-
-.zoom-controls button { 
-    width: 35px; height: 35px; border-radius: 50%; border: none; 
-    background: var(--accent-color); color: white; cursor: pointer; 
-    font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-}
-
-.thumbnails-container { 
-    display: flex; 
-    gap: 8px; 
-    margin-top: 15px; 
-    overflow-x: auto; 
-}
-
-.thumbnails-container img { 
-    width: 65px; height: 65px; object-fit: cover; cursor: pointer; 
-    border-radius: 8px; border: 2px solid transparent; 
-}
-
-/* KONTAKT I O MNIE - SPÓJNE WYMIARY */
-.contact-container, .about-container { display: flex; justify-content: center; align-items: center; padding: 50px 20px; }
-.contact-box, .about-box { padding: 40px; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-.contact-box { max-width: 600px; width: 100%; }
-.about-box { max-width: 1000px; }
-
-.about-content { display: flex; gap: 40px; align-items: center; }
-.about-image img { width: 100%; max-width: 320px; border-radius: 30px; }
+.about-content { display: flex; gap: 50px; align-items: center; }
+.about-image img { width: 100%; max-width: 350px; border-radius: 30px; }
 .about-text { flex: 1; text-align: left; }
-.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3.2rem; }
+.about-text h1 { font-family: var(--font-hand); color: var(--accent-color); font-size: 3.5rem; margin-top: 0; }
 
-/* PRZYCISKI GŁÓWNE */
+/* PRZYCISKI */
 .buy-btn { 
-    background: var(--accent-color); color: white; padding: 16px 30px; 
+    background: var(--accent-color); color: white; padding: 18px 35px; 
     text-align: center; border-radius: 40px; text-decoration: none; 
     font-weight: bold; border: none; cursor: pointer; transition: 0.3s; 
+    display: inline-block;
 }
-
 .buy-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3); }
 
-footer { padding: 30px; text-align: center; margin-top: 20px; }
+/* STOPKA */
+footer { 
+    padding: 30px; 
+    text-align: center; 
+    margin-top: auto; 
+}
 
 .close-btn { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; z-index: 10; }
 
-/* RESPONSYWNOŚĆ */
+/* MOBILE */
 @media (max-width: 1000px) {
     .lightbox-content { flex-direction: column; overflow-y: auto; width: 95%; }
     .main-img-container { height: 400px; }
-    .lightbox-info { border-left: none; border-top: 1px solid #eee; margin-top: 15px; }
     .about-content { flex-direction: column; text-align: center; }
     .about-text { text-align: center; }
     nav { padding: 15px 20px; }
