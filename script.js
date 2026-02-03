@@ -2,10 +2,11 @@ let currentAlbum = [];
 let currentIndex = 0;
 let scale = 1;
 let isDragging = false;
+let isLightboxLoading = false; 
+let currentLoadId = 0; // Identyfikator zapobiegający dublowaniu zdjęć
 let startX, startY, translateX = 0, translateY = 0;
 const formats = ['jpg', 'png', 'jpeg', 'JPG', 'PNG'];
 
-// Funkcja sprawdzająca czy obraz istnieje
 async function checkImage(url) {
     return new Promise(resolve => {
         const img = new Image();
@@ -15,11 +16,9 @@ async function checkImage(url) {
     });
 }
 
-// Naprawa miniatur na stronie głównej
 async function fixMainGallery() {
     const thumbs = document.querySelectorAll('.auto-thumb');
-    if (thumbs.length === 0) return; // Jeśli nie ma galerii na stronie, wyjdź
-
+    if (thumbs.length === 0) return;
     for (let img of thumbs) {
         const folder = img.getAttribute('data-folder');
         for (let ext of formats) {
@@ -29,23 +28,45 @@ async function fixMainGallery() {
     }
 }
 
-// Otwieranie Lightboxa
 async function openLightbox(folderName) {
+    if (isLightboxLoading) return; 
+    isLightboxLoading = true;
+    
+    // Zwiększamy ID sesji przy każdym otwarciu
+    const loadId = ++currentLoadId; 
+
     resetZoom();
+    
+    // Czyścimy wszystko na starcie
     currentAlbum = [];
     const thumbContainer = document.getElementById('lb-thumbnails');
     if (thumbContainer) thumbContainer.innerHTML = '';
+    
+    let tempAlbum = [];
 
+    // Szukanie zdjęć
     for (let i = 0; i <= 10; i++) {
+        // Jeśli w międzyczasie kliknięto coś innego, przerwij tę pętlę
+        if (loadId !== currentLoadId) return;
+
         let name = (i === 0) ? folderName : `${folderName}-${i}`;
         let foundPath = null;
         for (let ext of formats) {
             let path = `img/${folderName}/${name}.${ext}`;
             if (await checkImage(path)) { foundPath = path; break; }
         }
-        if (foundPath) currentAlbum.push(foundPath);
-        else if (i > 0) break;
+        
+        if (foundPath) {
+            tempAlbum.push(foundPath);
+        } else if (i > 0) {
+            break;
+        }
     }
+
+    // Sprawdzamy ponownie, czy to nadal ta sama sesja ładowania
+    if (loadId !== currentLoadId) return;
+
+    currentAlbum = tempAlbum;
 
     if (currentAlbum.length > 0) {
         currentIndex = 0;
@@ -53,6 +74,7 @@ async function openLightbox(folderName) {
         if (mainImg) mainImg.src = currentAlbum[0];
         
         if (thumbContainer) {
+            thumbContainer.innerHTML = ''; // Dodatkowe czyszczenie przed renderowaniem
             currentAlbum.forEach((path, idx) => {
                 const thumb = document.createElement('img');
                 thumb.src = path;
@@ -68,11 +90,14 @@ async function openLightbox(folderName) {
             updateThumbnails();
         }
     }
+
     const title = document.getElementById('lb-title');
-    if (title) title.innerText = "Dzieło: " + folderName;
+    if (title) title.innerText = folderName;
     
     const lb = document.getElementById('lightbox');
     if (lb) lb.style.display = 'flex';
+
+    isLightboxLoading = false;
 }
 
 function updateThumbnails() {
@@ -98,11 +123,8 @@ function applyTransform() {
     if (img) img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// Obsługa Drag & Drop i kółka myszy
 document.addEventListener('DOMContentLoaded', () => {
     const zoomBox = document.getElementById('zoom-container');
-
-    // Wykonuj tylko jeśli zoom-container istnieje na stronie
     if (zoomBox) {
         zoomBox.addEventListener('mousedown', (e) => {
             if (scale > 1) {
@@ -112,19 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
             }
         });
-
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             translateX = e.clientX - startX;
             translateY = e.clientY - startY;
             applyTransform();
         });
-
         window.addEventListener('mouseup', () => { isDragging = false; });
-
         zoomBox.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            changeZoom(e.deltaY > 0 ? -0.2 : 0.2);
+            if (scale > 1 || e.deltaY < 0) {
+                e.preventDefault();
+                changeZoom(e.deltaY > 0 ? -0.2 : 0.2);
+            }
         }, { passive: false });
     }
 });
@@ -132,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function closeLightbox() { 
     const lb = document.getElementById('lightbox');
     if (lb) lb.style.display = 'none'; 
+    isLightboxLoading = false;
 }
 
 function closeLightboxOutside(e) { 
